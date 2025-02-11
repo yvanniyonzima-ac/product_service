@@ -15,7 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read #This is required for actions/checkout
-
+    env:
+      PORT: 3030
+      
     steps:
       - uses: actions/checkout@v4
 
