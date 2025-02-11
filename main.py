@@ -1,27 +1,27 @@
-import os
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from flask import Flask, jsonify
+from flask_cors import CORS
 from dotenv import load_dotenv
+import os
 
+# Load environment variables from a .env file
 load_dotenv()
 
-app = FastAPI()
+app = Flask(__name__)
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["GET"],
-    allow_headers=["*"],
-)
+# Enable CORS for all routes and origins
+CORS(app)
 
-@app.get("/test")
-async def test():
-    return {"message": "Hello from test!"}
-
-@app.get("/products")
-async def get_products():
-    return [
+@app.route('/products', methods=['GET'])
+def get_products():
+    products = [
         {"id": 1, "name": "Dog Food", "price": 19.99},
         {"id": 2, "name": "Cat Food", "price": 34.99},
-        {"id": 3, "name": "Bird Seeds", "price": 10.99},
+        {"id": 3, "name": "Bird Seeds", "price": 10.99}
     ]
+    return jsonify(products)
+
+if __name__ == '__main__':
+    # Get the port from the environment variable or default to 3030
+    port = int(os.getenv('PORT', 3030))
+    # Run the Flask application on the specified port
+    app.run(host='0.0.0.0', port=port)
